@@ -35,26 +35,36 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 create:
-                    implementation: scripts/create_server.py
+                    implementation: scripts/nodes/server/create.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
-                        process: # Optional config of script plugin
-                            cwd: /tmp/workdir # this directory should already exist
-                            args: [arg1_value, arg2_value]
-                            env:
-                              MY_ENV_VARIABLE: MY_ENV_VARIABLE_VALUE
                 configure:
-                    implementation: scripts/configure_server.py
+                    implementation: scripts/nodes/server/configure.py
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+                start:
+                    implementation: scripts/nodes/server/start.py
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+
+                stop:
+                    implementation: scripts/nodes/server/stop.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
                 delete:
-                    implementation: scripts/delete_server.py
+                    implementation: scripts/nodes/server/delete.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -64,6 +74,8 @@ node_types:
     im.nodes.Network:
         derived_from: cloudify.nodes.Compute
         properties:
+            name:
+                description: Name or ID of the resource
             config:
                 description: credentials, timezone and workload manager
             resource_id:
@@ -81,22 +93,68 @@ node_types:
                     install_method: none
         interfaces:
             cloudify.interfaces.lifecycle:
-                create:
-                    implementation: scripts/create_network.py
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
                 configure:
-                    implementation: scripts/configure_network.py
+                    implementation: scripts/nodes/network/configure.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
-                delete:
-                    implementation: scripts/delete_network.py
+
+    im.nodes.Image:
+        derived_from: cloudify.nodes.Compute
+        properties:
+            name:
+                description: Name or ID of the resource
+            config:
+                description: credentials, timezone and workload manager
+            resource_id:
+                description: id of the resource
+            use_external_resource:
+                description: true to use an already created server
+                type: boolean
+                default: false
+            simulate:
+                description: Set to true to simulate job without sending it
+                type: boolean
+                default: False
+            agent_config: # This is mandatory, to say cloudify that we are not installing an agent
+                default:
+                    install_method: none
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: scripts/nodes/image/configure.py
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+
+    im.nodes.Flavour:
+        derived_from: cloudify.nodes.Compute
+        properties:
+            name:
+                description: Name or ID of the resource
+            config:
+                description: credentials, timezone and workload manager
+            resource_id:
+                description: id of the resource
+            use_external_resource:
+                description: true to use an already created server
+                type: boolean
+                default: false
+            simulate:
+                description: Set to true to simulate job without sending it
+                type: boolean
+                default: False
+            agent_config: # This is mandatory, to say cloudify that we are not installing an agent
+                default:
+                    install_method: none
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: scripts/nodes/flavour/configure.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -104,14 +162,14 @@ node_types:
                             default: { get_property: [SELF, simulate] }
 
 relationships:
-    setting_contained_in: # relationship to define to which server the other objects belongs (e.g. network)
-        derived_from: cloudify.relationships.contained_in
+    depends_on_setting: # relationship to define to which server the other objects belongs (e.g. network)
+        derived_from: cloudify.relationships.depends_on
         source_interfaces:
             cloudify.interfaces.relationship_lifecycle:
                 preconfigure:
-                    implementation: scripts/preconfigure_server.py
+                    implementation: scripts/relationships/depends_on_setting/preconfigure.py
                     inputs:
                         config: 
-                            default: { get_property: [SOURCE, config] }
+                            default: { get_property: [TARGET, config] }
                         simulate:
-                            default: { get_property: [SOURCE, simulate] }
+                            default: { get_property: [TARGET, simulate] }
