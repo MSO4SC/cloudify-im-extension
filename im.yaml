@@ -161,6 +161,37 @@ node_types:
                         simulate:
                             default: { get_property: [SELF, simulate] }
 
+
+    im.nodes.Software:
+        derived_from: cloudify.nodes.Compute
+        properties:
+            name:
+                description: Name or ID of the application
+            config:
+                description: credentials, timezone and workload manager
+            resource_id:
+                description: id of the resource
+            use_external_resource:
+                description: true to use an already created server
+                type: boolean
+                default: false
+            simulate:
+                description: Set to true to simulate job without sending it
+                type: boolean
+                default: False
+            agent_config: # This is mandatory, to say cloudify that we are not installing an agent
+                default:
+                    install_method: none
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: scripts/nodes/software/configure.py
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+
 relationships:
     depends_on_setting: # relationship to define to which server the other objects belongs (e.g. network)
         derived_from: cloudify.relationships.depends_on
