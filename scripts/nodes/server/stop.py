@@ -1,6 +1,7 @@
 import requests
 from cloudify import ctx
 from cloudify.state import ctx_parameters as inputs
+from cloudify.exceptions import *
 
 
 def reset_log_indentation():
