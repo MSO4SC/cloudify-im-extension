@@ -74,22 +74,16 @@ node_templates:
                 memory: 1024M
             use_external_resource: true
             resource_id: default_flavour
-            simulate: True
+            simulate: False
 
     software:
         type: im.nodes.Software
         properties:
             name: singularity
             config: 
-                packages: ["wget", "tar", "gcc", "python", "libarchive-devel", "squashfs-tools", "make"]
+                packages: ["openmpi", "singularity"]
                 deploy: |
-                    wget https://github.com/singularityware/singularity/releases/download/2.5.2/singularity-2.5.2.tar.gz -O singularity-2.5.2.tar.gz 
-                    tar xvf singularity-2.5.2.tar.gz 
-                    cd singularity-2.5.2
-                    ./configure --prefix=/usr/local 
-                    make
-                    make install 
-                    rm -rf singularity-2.5.2*
+                    ln -s /usr/lib64/openmpi/bin/mpirun /usr/bin/mpirun
             use_external_resource: true
             resource_id: default_software
             simulate: False
