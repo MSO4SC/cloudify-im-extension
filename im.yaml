@@ -18,7 +18,7 @@ plugins:
     source: https://github.com/MSO4SC/cloudify-im-extension/archive/integration.zip
 
 node_types:
-    im.plugin.nodes.Server:
+    im.nodes.Server:
         derived_from: cloudify.nodes.Compute
         properties:
             config:
@@ -75,7 +75,7 @@ node_types:
                         simulate:
                             default: { get_property: [SELF, simulate] }
 
-    im.plugin.nodes.Network:
+    im.nodes.Network:
         derived_from: cloudify.nodes.Compute
         properties:
             name:
@@ -105,7 +105,7 @@ node_types:
                         simulate:
                             default: { get_property: [SELF, simulate] }
 
-    im.plugin.nodes.Image:
+    im.nodes.Image:
         derived_from: cloudify.nodes.Compute
         properties:
             name:
@@ -135,7 +135,7 @@ node_types:
                         simulate:
                             default: { get_property: [SELF, simulate] }
 
-    im.plugin.nodes.Flavour:
+    im.nodes.Flavour:
         derived_from: cloudify.nodes.Compute
         properties:
             name:
@@ -166,7 +166,7 @@ node_types:
                             default: { get_property: [SELF, simulate] }
 
 
-    im.plugin.nodes.Software:
+    im.nodes.Software:
         derived_from: cloudify.nodes.Compute
         properties:
             name:
