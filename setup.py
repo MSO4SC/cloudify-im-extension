@@ -29,7 +29,7 @@ setup(
     description='Plugin to use IM from Cloudify',
 
     # This must correspond to the actual packages in the plugin.
-    packages=['scripts'],
+    packages=['plugin'],
 
     zip_safe=False,
     install_requires=[
