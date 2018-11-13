@@ -31,7 +31,18 @@ setup(
     # This must correspond to the actual packages in the plugin.
     packages=['plugin',
               'plugin.nodes',
-              'plugin.nodes.network'],
+              'plugin.nodes.flavour',
+              'plugin.nodes.flavour.configure',
+              'plugin.nodes.image',
+              'plugin.nodes.image.configure',
+              'plugin.nodes.network',
+              'plugin.nodes.network.configure',
+              'plugin.nodes.server',
+              'plugin.nodes.software.configure',
+              'plugin.nodes.software.create',
+              'plugin.nodes.software.delete',
+              'plugin.nodes.software.start',
+              'plugin.nodes.software.stop'],
 
     zip_safe=False,
     install_requires=[
