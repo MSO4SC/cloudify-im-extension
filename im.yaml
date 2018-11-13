@@ -61,7 +61,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: im.nodes.network.configure
+                    implementation: im.plugin.nodes.network.configure
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
