@@ -36,44 +36,7 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-        interfaces:
-            cloudify.interfaces.lifecycle:
-                create:
-                    implementation: im.nodes.server.create
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
-                configure:
-                    implementation: im.nodes.server.configure
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
-                start:
-                    implementation: im.nodes.server.start
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
 
-                stop:
-                    implementation: im.nodes.server.stop
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
-                delete:
-                    implementation: im.nodes.server.delete
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
 
     im.nodes.Network:
         derived_from: cloudify.nodes.Compute
