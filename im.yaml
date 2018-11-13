@@ -88,15 +88,7 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-        interfaces:
-            cloudify.interfaces.lifecycle:
-                configure:
-                    implementation: im.nodes.image.configure
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
+
 
     im.nodes.Flavour:
         derived_from: cloudify.nodes.Compute
@@ -118,15 +110,6 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-        interfaces:
-            cloudify.interfaces.lifecycle:
-                configure:
-                    implementation: im.nodes.flavour.configure
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
 
 
     im.nodes.Software:
@@ -149,25 +132,8 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-        interfaces:
-            cloudify.interfaces.lifecycle:
-                configure:
-                    implementation: im.nodes.software.configure
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
+
 
 relationships:
     depends_on_setting: # relationship to define to which server the other objects belongs (e.g. network)
         derived_from: cloudify.relationships.depends_on
-        source_interfaces:
-            cloudify.interfaces.relationship_lifecycle:
-                preconfigure:
-                    implementation: im.relationships.depends_on_setting.preconfigure
-                    inputs:
-                        config: 
-                            default: { get_property: [TARGET, config] }
-                        simulate:
-                            default: { get_property: [TARGET, simulate] }
