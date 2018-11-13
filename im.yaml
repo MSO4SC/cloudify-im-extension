@@ -39,21 +39,21 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 create:
-                    implementation: nodes/server/create.py
+                    implementation: im/nodes/server/create.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
                 configure:
-                    implementation: nodes/server/configure.py
+                    implementation: im/nodes/server/configure.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
                 start:
-                    implementation: nodes/server/start.py
+                    implementation: im/nodes/server/start.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -61,14 +61,14 @@ node_types:
                             default: { get_property: [SELF, simulate] }
 
                 stop:
-                    implementation: nodes/server/stop.py
+                    implementation: im/nodes/server/stop.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
                 delete:
-                    implementation: nodes/server/delete.py
+                    implementation: im/nodes/server/delete.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -98,7 +98,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: nodes/network/configure.py
+                    implementation: im/nodes/network/configure.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -128,7 +128,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: nodes/image/configure.py
+                    implementation: im/nodes/image/configure.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -158,7 +158,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: nodes/flavour/configure.py
+                    implementation: im/nodes/flavour/configure.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -189,7 +189,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: nodes/software/configure.py
+                    implementation: im/nodes/software/configure.py
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -202,7 +202,7 @@ relationships:
         source_interfaces:
             cloudify.interfaces.relationship_lifecycle:
                 preconfigure:
-                    implementation: relationships/depends_on_setting/preconfigure.py
+                    implementation: im/relationships/depends_on_setting/preconfigure.py
                     inputs:
                         config: 
                             default: { get_property: [TARGET, config] }
