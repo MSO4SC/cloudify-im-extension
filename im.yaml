@@ -15,7 +15,7 @@
 plugins:
     im:
         executor: central_deployment_agent
-        source: https://github.com/MSO4SC/cloudify-im-extension/archive/integration.zip
+        source: https://github.com/MSO4SC/cloudify-im-extension/archive/master.zip
         package_name: im
         package_version: '0.1.0'
 
