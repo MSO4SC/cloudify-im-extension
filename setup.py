@@ -23,13 +23,15 @@ setup(
     # Do not use underscores in the plugin name.
     name='im',
 
-    version='0.0.1',
+    version='0.1.0',
     author='Victor Sande',
     author_email='vsande@cesga.es',
     description='Plugin to use IM from Cloudify',
 
     # This must correspond to the actual packages in the plugin.
-    packages=['scripts'],
+    packages=['plugin',
+              'plugin.nodes',
+              'plugin.relationships'],
 
     zip_safe=False,
     install_requires=[

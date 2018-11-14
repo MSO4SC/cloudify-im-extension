@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#        http:..www.apache.org.licenses.LICENSE-2.0
+#        http://www.apache.org.licenses.LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,16 +13,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 plugins:
-  im:
-    executor: central_deployment_agent
-    source: ./
+    im:
+        executor: central_deployment_agent
+        source: https://github.com/MSO4SC/cloudify-im-extension/archive/master.zip
+        package_name: im
+        package_version: '0.1.0'
 
 node_types:
     im.nodes.Server:
         derived_from: cloudify.nodes.Compute
         properties:
             config:
-                description: credentials, timezone and workload manager
+                description: Server config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -39,21 +41,21 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 create:
-                    implementation: im.scripts.nodes.server.create
+                    implementation: im.plugin.nodes.server.create
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
                 configure:
-                    implementation: im.scripts.nodes.server.configure
+                    implementation: im.plugin.nodes.server.configure
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
                 start:
-                    implementation: im.scripts.nodes.server.start
+                    implementation: im.plugin.nodes.server.start
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -61,14 +63,14 @@ node_types:
                             default: { get_property: [SELF, simulate] }
 
                 stop:
-                    implementation: im.scripts.nodes.server.stop
+                    implementation: im.plugin.nodes.server.stop
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
                 delete:
-                    implementation: im.scripts.nodes.server.delete
+                    implementation: im.plugin.nodes.server.delete
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -81,7 +83,7 @@ node_types:
             name:
                 description: Name or ID of the resource
             config:
-                description: credentials, timezone and workload manager
+                description: Network config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -98,7 +100,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: im.scripts.nodes.network.configure
+                    implementation: im.plugin.nodes.network.configure
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -111,7 +113,7 @@ node_types:
             name:
                 description: Name or ID of the resource
             config:
-                description: credentials, timezone and workload manager
+                description: Image config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -128,7 +130,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: im.scripts.nodes.image.configure
+                    implementation: im.plugin.nodes.image.configure
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -141,7 +143,7 @@ node_types:
             name:
                 description: Name or ID of the resource
             config:
-                description: credentials, timezone and workload manager
+                description: Flavour config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -158,7 +160,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: im.scripts.nodes.flavour.configure
+                    implementation: im.plugin.nodes.flavour.configure
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -172,7 +174,7 @@ node_types:
             name:
                 description: Name or ID of the application
             config:
-                description: credentials, timezone and workload manager
+                description: Software config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -189,7 +191,7 @@ node_types:
         interfaces:
             cloudify.interfaces.lifecycle:
                 configure:
-                    implementation: im.scripts.nodes.software.configure
+                    implementation: im.plugin.nodes.software.configure
                     inputs:
                         config:
                             default: { get_property: [SELF, config] }
@@ -202,9 +204,10 @@ relationships:
         source_interfaces:
             cloudify.interfaces.relationship_lifecycle:
                 preconfigure:
-                    implementation: im.scripts.relationships.depends_on_setting.preconfigure
+                    implementation: im.plugin.relationships.depends_on_setting.preconfigure
                     inputs:
                         config: 
                             default: { get_property: [TARGET, config] }
                         simulate:
                             default: { get_property: [TARGET, simulate] }
+
