@@ -41,13 +41,12 @@ def create_child(dictionary, key, value):
     return child
 
 
-def build_radl_software():
+def build_radl_software(config):
     ctx.logger.debug('{0} Infrastructure Manager deployment info:'.format(get_log_indentation()))
     increase_log_indentation()
 
     print(str(inputs))
     name   = get_child(dictionary=inputs, key='name' ) or 'software'
-    config = get_child(dictionary=inputs, key='config', required=True)
     packages = get_child(dictionary=config, key='packages') or []
     deploy = get_child(dictionary=config, key='deploy', required=True)
 
@@ -95,15 +94,15 @@ contextualize (
     return deploy_radl
 
 @operation
-def configure():
-    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+def configure(config, simulate):
+    if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
         increase_log_indentation()
         radl = get_child(ctx.instance.runtime_properties, key='settings')
         if not radl:
             radl = create_child(ctx.instance.runtime_properties, key='settings', value={})
-        radl_software = create_child(radl, key='software', value=build_radl_software())
+        radl_software = create_child(radl, key='software', value=build_radl_software(config))
         decrease_log_indentation()
         ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
 

@@ -42,10 +42,10 @@ def create_child(dictionary, key, value):
         child = dictionary[key]
     return child
 
-def build_request_headers():
+def build_request_headers(config):
     ctx.logger.debug('{0} Infrastructure Manager configuration info:'.format(get_log_indentation()))
     increase_log_indentation()
-    config = get_child(dictionary=inputs, key='config', required=True)
+
     im_id = get_child(dictionary=config, key='id', required=True)
     im_type = get_child(dictionary=config, key='type', required=True)
     im_user = get_child(dictionary=config, key='user', required=True)
@@ -127,8 +127,8 @@ def wait_for_configuration(timestep):
     decrease_log_indentation()
 
 @operation
-def configure():
-    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+def configure(config, simulate):
+    if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
         increase_log_indentation()
@@ -137,14 +137,13 @@ def configure():
         ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
 
 @operation
-def create():
-    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+def create(config, simulate):
+    if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Create operation: Begin'.format(get_log_indentation()))
         increase_log_indentation()
-        config = get_child(dictionary=inputs, key='config', required=True)
         host = get_child(dictionary=config, key='host', required=True)
-        headers = create_child(ctx.instance.runtime_properties, key='headers', value=build_request_headers())
+        headers = create_child(ctx.instance.runtime_properties, key='headers', value=build_request_headers(config))
         response = requests.post(url=host+'/infrastructures', data="", headers=headers)
         ctx.logger.debug('{0} Response code: {1}'.format(get_log_indentation(), str(response.status_code)))
         ctx.logger.info('{0} Infrastructure ID: {1}'.format(get_log_indentation(), response.text))
@@ -154,12 +153,11 @@ def create():
         ctx.logger.debug('{0} Create operation: End'.format(get_log_indentation()))
 
 @operation
-def delete():
-    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+def delete(config, simulate):
+    if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Delete operation: Begin'.format(get_log_indentation()))
         increase_log_indentation()
-        config = get_child(dictionary=inputs, key='config', required=True)
         host = get_child(dictionary=config, key='host', required=True)
         headers = get_child(dictionary=ctx.instance.runtime_properties, key='headers', required=True)
         infrastructure_id = get_child(dictionary=ctx.instance.runtime_properties, key='infrastructure_id', required=True)
@@ -171,8 +169,8 @@ def delete():
         ctx.logger.debug('{0} Delete operation: End'.format(get_log_indentation()))
 
 @operation
-def start():
-    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+def start(config, simulate):
+    if (not simulate):
         try:
             reset_log_indentation()
             ctx.logger.debug('{0} Start operation: Begin'.format(get_log_indentation()))
@@ -193,8 +191,8 @@ def start():
             ctx.logger.error('ERROR: {0}'.format(str(ex)))
 
 @operation
-def stop():
-    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+def stop(config, simulate):
+    if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Stop operation: Begin'.format(get_log_indentation()))
         increase_log_indentation()

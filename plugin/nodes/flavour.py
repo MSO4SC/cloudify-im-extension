@@ -41,11 +41,10 @@ def create_child(dictionary, key, value):
     return child
 
 
-def build_radl_flavour():
+def build_radl_flavour(config):
     ctx.logger.debug('{0} Infrastructure Manager deployment info:'.format(get_log_indentation()))
     increase_log_indentation()
 
-    config   = get_child(dictionary=inputs, key='config', required=True)
     type = get_child(dictionary=config, key='type', required=True)
     cores = get_child(dictionary=config, key='cores', required=True)
     memory = get_child(dictionary=config, key='memory', required=True)
@@ -59,15 +58,15 @@ def build_radl_flavour():
     return flavour_radl
 
 @operation
-def configure():
-    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+def configure(config, simulate):
+    if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
         increase_log_indentation()
         radl = get_child(ctx.instance.runtime_properties, key='settings')
         if not radl:
             radl = create_child(ctx.instance.runtime_properties, key='settings', value={})
-        radl_network = create_child(radl, key='flavour', value=build_radl_flavour())
+        radl_network = create_child(radl, key='flavour', value=build_radl_flavour(config))
         decrease_log_indentation()
         ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
     
