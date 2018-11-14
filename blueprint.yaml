@@ -51,7 +51,7 @@ node_templates:
         properties:
             name: Centos-/
             config: 
-                id: 'https://fedcloud-services.egi.cesga.es:11443/51'
+                id: 'https://fedcloud-services.egi.cesga.es:11443/117'
                 storage: 1024M
                 username: ...
                 password: ...
@@ -67,11 +67,11 @@ node_templates:
     flavour:
         type: im.nodes.Flavour
         properties:
-            name: small
+            name: medium_4g
             config: 
-                type: small
-                cores: 1
-                memory: 1024M
+                type: medium_4g
+                cores: 2
+                memory: 4096M
             use_external_resource: true
             resource_id: default_flavour
             simulate: False
