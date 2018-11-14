@@ -127,7 +127,7 @@ def wait_for_configuration(timestep):
     decrease_log_indentation()
 
 @operation
-def configure(config, simulate):
+def configure(config, simulate, **kwargs):
     if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
@@ -137,7 +137,7 @@ def configure(config, simulate):
         ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
 
 @operation
-def create(config, simulate):
+def create(config, simulate, **kwargs):
     if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Create operation: Begin'.format(get_log_indentation()))
@@ -153,7 +153,7 @@ def create(config, simulate):
         ctx.logger.debug('{0} Create operation: End'.format(get_log_indentation()))
 
 @operation
-def delete(config, simulate):
+def delete(config, simulate, **kwargs):
     if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Delete operation: Begin'.format(get_log_indentation()))
@@ -169,7 +169,7 @@ def delete(config, simulate):
         ctx.logger.debug('{0} Delete operation: End'.format(get_log_indentation()))
 
 @operation
-def start(config, simulate):
+def start(config, simulate, **kwargs):
     if (not simulate):
         try:
             reset_log_indentation()
@@ -191,7 +191,7 @@ def start(config, simulate):
             ctx.logger.error('ERROR: {0}'.format(str(ex)))
 
 @operation
-def stop(config, simulate):
+def stop(config, simulate, **kwargs):
     if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Stop operation: Begin'.format(get_log_indentation()))

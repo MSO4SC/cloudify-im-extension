@@ -41,7 +41,7 @@ def create_child(dictionary, key, value):
     return child
 
 @operation
-def preconfigure(config, simulate):
+def preconfigure(config, simulate, **kwargs):
     if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Preconfigure operation: Begin'.format(get_log_indentation()))

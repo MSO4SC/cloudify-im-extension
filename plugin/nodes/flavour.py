@@ -58,7 +58,7 @@ def build_radl_flavour(config):
     return flavour_radl
 
 @operation
-def configure(config, simulate):
+def configure(config, simulate, **kwargs):
     if (not simulate):
         reset_log_indentation()
         ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
