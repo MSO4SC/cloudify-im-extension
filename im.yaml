@@ -97,15 +97,6 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-        interfaces:
-            cloudify.interfaces.lifecycle:
-                configure:
-                    implementation: im.plugin.nodes.network.configure
-                    inputs:
-                        config:
-                            default: { get_property: [SELF, config] }
-                        simulate:
-                            default: { get_property: [SELF, simulate] }
 
     im.nodes.Image:
         derived_from: cloudify.nodes.Compute
