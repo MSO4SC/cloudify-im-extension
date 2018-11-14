@@ -24,7 +24,7 @@ node_types:
         derived_from: cloudify.nodes.Compute
         properties:
             config:
-                description: credentials, timezone and workload manager
+                description: Server config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -83,7 +83,7 @@ node_types:
             name:
                 description: Name or ID of the resource
             config:
-                description: credentials, timezone and workload manager
+                description: Network config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -97,6 +97,15 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: im.plugin.nodes.network.configure
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
 
     im.nodes.Image:
         derived_from: cloudify.nodes.Compute
@@ -104,7 +113,7 @@ node_types:
             name:
                 description: Name or ID of the resource
             config:
-                description: credentials, timezone and workload manager
+                description: Image config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -134,7 +143,7 @@ node_types:
             name:
                 description: Name or ID of the resource
             config:
-                description: credentials, timezone and workload manager
+                description: Flavour config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
@@ -165,7 +174,7 @@ node_types:
             name:
                 description: Name or ID of the application
             config:
-                description: credentials, timezone and workload manager
+                description: Software config. See blueprint.yaml
             resource_id:
                 description: id of the resource
             use_external_resource:
