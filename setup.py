@@ -31,11 +31,6 @@ setup(
     # This must correspond to the actual packages in the plugin.
     packages=['plugin',
               'plugin.nodes',
-              'plugin.nodes.flavour',
-              'plugin.nodes.image',
-              'plugin.nodes.network',
-              'plugin.nodes.server',
-              'plugin.nodes.software',
               'plugin.relationships',
               'plugin.relationships.depends_on_setting'],
 
