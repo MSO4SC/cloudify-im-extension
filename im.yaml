@@ -13,9 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 plugins:
-  im:
-    executor: central_deployment_agent
-    source: https://github.com/MSO4SC/cloudify-im-extension/archive/integration.zip
+    im:
+        executor: central_deployment_agent
+        source: https://github.com/MSO4SC/cloudify-im-extension/archive/integration.zip
+        package_name: cloudify-im-extension
+        package_version: '0.1.0'
 
 node_types:
     im.nodes.Server:
