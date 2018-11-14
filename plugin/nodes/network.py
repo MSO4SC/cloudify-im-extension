@@ -1,5 +1,6 @@
 from cloudify import ctx
 from cloudify.state import ctx_parameters as inputs
+from cloudify.decorators import operation
 from cloudify.exceptions import *
 
 def reset_log_indentation():
@@ -58,26 +59,17 @@ def build_radl_network():
     decrease_log_indentation()
     return network_radl
 
-
+@operation
 def configure():
-    reset_log_indentation()
-    ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
-    increase_log_indentation()
-    radl = get_child(ctx.instance.runtime_properties, key='settings')
-    if not radl:
-        radl = create_child(ctx.instance.runtime_properties, key='settings', value={})
-    radl_network = create_child(radl, key='network', value=build_radl_network())
-    decrease_log_indentation()
-    ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
+    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+        reset_log_indentation()
+        ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
+        increase_log_indentation()
+        radl = get_child(ctx.instance.runtime_properties, key='settings')
+        if not radl:
+            radl = create_child(ctx.instance.runtime_properties, key='settings', value={})
+        radl_network = create_child(radl, key='network', value=build_radl_network())
+        decrease_log_indentation()
+        ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
 
-#    ctx.logger.info('Create server')
-#    ctx.logger.info('Just logging the node instance: {0}'
-#                    .format(str(ctx.instance)))
-#    ctx.logger.info('Just logging the runtime properties: {0}'
-#                    .format(str(ctx.instance.runtime_properties)))
-#    ctx.logger.info('The config operation input is : {0}'
-#                    .format(str(inputs)))
 
-    
-if (not get_child(dictionary=inputs, key='simulate', required=False)):
-    configure()

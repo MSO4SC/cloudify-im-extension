@@ -5,7 +5,7 @@
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
-#        http:..www.apache.org.licenses.LICENSE-2.0
+#        http://www.apache.org.licenses.LICENSE-2.0
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
@@ -38,7 +38,44 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                create:
+                    implementation: im.plugin.nodes.server.create
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+                configure:
+                    implementation: im.plugin.nodes.server.configure
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+                start:
+                    implementation: im.plugin.nodes.server.start
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
 
+                stop:
+                    implementation: im.plugin.nodes.server.stop
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+                delete:
+                    implementation: im.plugin.nodes.server.delete
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
 
     im.nodes.Network:
         derived_from: cloudify.nodes.Compute
@@ -60,7 +97,15 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: im.plugin.nodes.network.configure
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
 
     im.nodes.Image:
         derived_from: cloudify.nodes.Compute
@@ -82,7 +127,15 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: im.plugin.nodes.image.configure
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
 
     im.nodes.Flavour:
         derived_from: cloudify.nodes.Compute
@@ -135,9 +188,26 @@ node_types:
             agent_config: # This is mandatory, to say cloudify that we are not installing an agent
                 default:
                     install_method: none
-
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: im.plugin.nodes.software.configure
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
 
 relationships:
     depends_on_setting: # relationship to define to which server the other objects belongs (e.g. network)
         derived_from: cloudify.relationships.depends_on
+        source_interfaces:
+            cloudify.interfaces.relationship_lifecycle:
+                preconfigure:
+                    implementation: im.plugin.relationships.depends_on_setting.preconfigure
+                    inputs:
+                        config: 
+                            default: { get_property: [TARGET, config] }
+                        simulate:
+                            default: { get_property: [TARGET, simulate] }
 

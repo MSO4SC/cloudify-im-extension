@@ -1,5 +1,6 @@
 from cloudify import ctx
 from cloudify.state import ctx_parameters as inputs
+from cloudify.decorators import operation
 from cloudify.exceptions import *
 
 def reset_log_indentation():
@@ -63,18 +64,18 @@ def build_radl_image():
     decrease_log_indentation()
     return image_radl
 
-
+@operation
 def configure():
-    reset_log_indentation()
-    ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
-    increase_log_indentation()
-    radl = get_child(ctx.instance.runtime_properties, key='settings')
-    if not radl:
-        radl = create_child(ctx.instance.runtime_properties, key='settings', value={})
-    radl_image = create_child(radl, key='image', value=build_radl_image())
-    decrease_log_indentation()
-    ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
+    if (not get_child(dictionary=inputs, key='simulate', required=False)):
+        reset_log_indentation()
+        ctx.logger.debug('{0} Configure operation: Begin'.format(get_log_indentation()))
+        increase_log_indentation()
+        radl = get_child(ctx.instance.runtime_properties, key='settings')
+        if not radl:
+            radl = create_child(ctx.instance.runtime_properties, key='settings', value={})
+        radl_image = create_child(radl, key='image', value=build_radl_image())
+        decrease_log_indentation()
+        ctx.logger.debug('{0} Configure operation: End'.format(get_log_indentation()))
 
     
-if (not get_child(dictionary=inputs, key='simulate', required=False)):
-    configure()
+
