@@ -60,6 +60,8 @@ deploy node 1
 """ + \
 software 
 
+    ctx.logger.debug('{0} Complete RADL: '.format(get_log_indentation(), radl))
+
     decrease_log_indentation()
     return radl
 
