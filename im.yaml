@@ -140,12 +140,4 @@ node_types:
 relationships:
     depends_on_setting: # relationship to define to which server the other objects belongs (e.g. network)
         derived_from: cloudify.relationships.depends_on
-        source_interfaces:
-            cloudify.interfaces.relationship_lifecycle:
-                preconfigure:
-                    implementation: im.plugin.relationships.depends_on_setting.preconfigure
-                    inputs:
-                        config: 
-                            default: { get_property: [TARGET, config] }
-                        simulate:
-                            default: { get_property: [TARGET, simulate] }
+
