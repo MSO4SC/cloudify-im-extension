@@ -31,8 +31,7 @@ setup(
     # This must correspond to the actual packages in the plugin.
     packages=['plugin',
               'plugin.nodes',
-              'plugin.relationships',
-              'plugin.relationships.depends_on_setting'],
+              'plugin.relationships'],
 
     zip_safe=False,
     install_requires=[
