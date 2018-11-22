@@ -3,13 +3,25 @@ from cloudify.state import ctx_parameters as inputs
 from cloudify.decorators import operation
 from cloudify.exceptions import *
 from plugin.nodes.utils import *
+import paramiko
+import StringIO
 
 def build_radl_keypair(config):
     ctx.logger.debug('{0} Infrastructure Manager deployment info:'.format(get_log_indentation()))
     increase_log_indentation()
 
-    public_key = get_child(dictionary=config, key='public_key', required=True)
-    private_key = get_child(dictionary=config, key='private_key', required=True)
+    public_key = get_child(dictionary=config, key='public_key') or None
+    private_key = get_child(dictionary=config, key='private_key') or None
+
+    if not (public_key and private_key):
+        increase_log_indentation()
+        ctx.logger.debug('{0} Creating RSA keypair ...'.format(get_log_indentation()))
+        private_key_stream = StringIO.StringIO()
+        key = paramiko.RSAKey.generate(2048)
+        public_key = key.get_base64().strip()
+        key.write_private_key(private_key_stream)
+        private_key = private_key_stream.getvalue().strip()
+        decrease_log_indentation()
 
     keypair_radl = ''
     keypair_radl += "    disk.0.os.credentials.public_key = '" + str(public_key.strip()) + "' and \n"
