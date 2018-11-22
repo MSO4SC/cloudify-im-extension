@@ -18,7 +18,7 @@ def build_radl_keypair(config):
         ctx.logger.debug('{0} Creating RSA keypair ...'.format(get_log_indentation()))
         private_key_stream = StringIO.StringIO()
         key = paramiko.RSAKey.generate(2048)
-        public_key = key.get_base64().strip()
+        public_key = '{0} {1}'.format(key.get_name().strip(), key.get_base64().strip())
         key.write_private_key(private_key_stream)
         private_key = private_key_stream.getvalue().strip()
         decrease_log_indentation()
