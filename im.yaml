@@ -15,7 +15,7 @@
 plugins:
     im:
         executor: central_deployment_agent
-        source: https://github.com/MSO4SC/cloudify-im-extension/archive/master.zip
+        source: https://github.com/MSO4SC/cloudify-im-extension/archive/add/keypair.zip
         package_name: im
         package_version: '0.1.0'
 
@@ -136,6 +136,38 @@ node_types:
                             default: { get_property: [SELF, config] }
                         simulate:
                             default: { get_property: [SELF, simulate] }
+
+
+    im.nodes.Keypair:
+        derived_from: cloudify.nodes.Compute
+        properties:
+            name:
+                description: Name or ID of the resource
+            config:
+                description: Image config. See blueprint.yaml
+            resource_id:
+                description: id of the resource
+            use_external_resource:
+                description: true to use an already created server
+                type: boolean
+                default: false
+            simulate:
+                description: Set to true to simulate job without sending it
+                type: boolean
+                default: False
+            agent_config: # This is mandatory, to say cloudify that we are not installing an agent
+                default:
+                    install_method: none
+        interfaces:
+            cloudify.interfaces.lifecycle:
+                configure:
+                    implementation: im.plugin.nodes.keypair.configure
+                    inputs:
+                        config:
+                            default: { get_property: [SELF, config] }
+                        simulate:
+                            default: { get_property: [SELF, simulate] }
+
 
     im.nodes.Flavour:
         derived_from: cloudify.nodes.Compute
