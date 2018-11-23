@@ -10,18 +10,14 @@ def build_radl_image(config):
 
     id = get_child(dictionary=config, key='id', required=True)
     storage = get_child(dictionary=config, key='storage')
-    username = get_child(dictionary=config, key='username', required=True)
-    password = get_child(dictionary=config, key='password', required=True)
-    public_key = get_child(dictionary=config, key='public_key', required=True)
-    private_key = get_child(dictionary=config, key='private_key', required=True)
+    username = get_child(dictionary=config, key='username') or 'user'
+    password = get_child(dictionary=config, key='password') or ''
 
     image_radl = ''
     image_radl += "    disk.0.image.url = '" + str(id) + "' and \n"
-    if storage: image_radl += "    disk.0.image.size = '" + str(storage) + "' and \n" 
     image_radl += "    disk.0.os.credentials.username = '" + str(username) + "' and \n"
-    image_radl += "    disk.0.os.credentials.password = '" + str(password) + "' and \n"
-    image_radl += "    disk.0.os.credentials.public_key = '" + str(public_key.strip()) + "' and \n"
-    image_radl += "    disk.0.os.credentials.private_key = '" + str(private_key.strip()) + "' "
+    if storage: image_radl += "    disk.0.image.size = '" + str(storage) + "' and \n" 
+    if password: image_radl += "    disk.0.os.credentials.password = '" + str(password) + "' and \n"
 
     decrease_log_indentation()
     return image_radl

@@ -41,9 +41,10 @@ def build_radl():
 
 
     settings = get_child(ctx.instance.runtime_properties, key='settings', required=True)    
-    network = get_child(settings, key='network') or ''
-    image = get_child(settings, key='image', required=True)
-    flavour = get_child(settings, key='flavour') or ''
+    network  = get_child(settings, key='network') or ''
+    image    = get_child(settings, key='image', required=True)
+    keypair  = get_child(settings, key='keypair', required=True)
+    flavour  = get_child(settings, key='flavour') or ''
     software = get_child(settings, key='software') or ''
 
     radl = \
@@ -53,6 +54,7 @@ network + \
 "    net_interface.0.connection = 'net' and \n" + \
 flavour + \
 image + \
+keypair + \
 """
 )
 
