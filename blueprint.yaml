@@ -49,14 +49,24 @@ node_templates:
     image:
         type: im.nodes.Image
         properties:
-            name: Centos-/
+            name: Centos-7
             config: 
                 id: 'https://fedcloud-services.egi.cesga.es:11443/51'
                 storage: 1024M
-                username: ...
-                password: ...
-                public_key: 'ssh-rsa ...'
-                private_key: |
+                username: ... # Optional
+                password: ... # Optional
+            use_external_resource: true
+            resource_id: default_image
+            simulate: False
+
+    keypair:
+        type: im.nodes.Keypair
+        properties:
+            name: Credentials
+            config: 
+                id: 'user@laptop'
+                public_key: 'ssh-rsa ...' # Optional
+                private_key: | # Optional
                     -----BEGIN RSA PRIVATE KEY-----
                     ...
                     -----END RSA PRIVATE KEY-----
@@ -79,7 +89,7 @@ node_templates:
     software:
         type: im.nodes.Software
         properties:
-            name: singularity
+            name: singularity-openmpi
             config: 
                 packages: ["openmpi", "singularity"]
                 deploy: |
