@@ -11,7 +11,7 @@ def build_radl_image(config):
     id = get_child(dictionary=config, key='id', required=True)
     storage = get_child(dictionary=config, key='storage')
     username = get_child(dictionary=config, key='username') or 'user'
-    password = get_child(dictionary=config, key='password')
+    password = get_child(dictionary=config, key='password') or ''
 
     image_radl = ''
     image_radl += "    disk.0.image.url = '" + str(id) + "' and \n"
